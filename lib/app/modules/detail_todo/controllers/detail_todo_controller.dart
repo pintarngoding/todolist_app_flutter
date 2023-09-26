@@ -50,7 +50,6 @@ class DetailTodoController extends GetxController {
       onConfirm: () async {
         Get.back(); // close modal
         Get.back(); // back page
-
         try {
           String uid = auth.currentUser!.uid;
           await firestore
