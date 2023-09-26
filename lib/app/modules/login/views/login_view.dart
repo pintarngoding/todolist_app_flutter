@@ -11,6 +11,7 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: AppColor.primary,
         elevation: 0.0,
@@ -188,37 +189,44 @@ class LoginView extends GetView<LoginController> {
                 const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Get.toNamed(Routes.REGISTER);
-                    },
-                    child: Text(
-                      'Daftar',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.primary,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 18),
-                      elevation: 0,
-                      primary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(
-                          color: AppColor
-                              .primary, // Replace this with your desired border color
-                          width:
-                              1.0, // Replace this with your desired border width
+                Center(
+                    child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            Get.toNamed(Routes.REGISTER);
+                          },
+                          child: Text(
+                            'Daftar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.primary,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 18),
+                            elevation: 0,
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                color: AppColor
+                                    .primary, // Replace this with your desired border color
+                                width:
+                                    1.0, // Replace this with your desired border width
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
+                )),
               ],
             ),
           ),
