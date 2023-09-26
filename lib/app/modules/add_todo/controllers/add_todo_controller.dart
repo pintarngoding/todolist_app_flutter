@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_crud_firebase/app/modules/add_todo/views/camera_view.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,6 +23,9 @@ class AddTodoController extends GetxController {
 
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
+  File? file;
 
   @override
   void onInit() {
@@ -39,6 +47,24 @@ class AddTodoController extends GetxController {
 
   void increment() => count.value++;
 
+  void pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      file = File(result.files.single.path ?? '');
+    } else {
+      // User canceled the picker
+    }
+    update();
+  }
+
+  void toCamera() {
+    Get.to(CameraView())!.then((result) {
+      file = result;
+      update();
+    });
+  }
+
   Future<void> addTodo() async {
     if (titleC.text.isNotEmpty && descriptionC.text.isNotEmpty) {
       isLoading.value = true;
@@ -56,31 +82,44 @@ class AddTodoController extends GetxController {
   createTodoData() async {
     isLoadingCreateTodo.value = true;
     String adminEmail = auth.currentUser!.email!;
-    try {
-      String uid = auth.currentUser!.uid;
-      CollectionReference<Map<String, dynamic>> childrenCollection =
-          await firestore.collection("users").doc(uid).collection("todos");
+    if (file != null) {
+      try {
+        String uid = auth.currentUser!.uid;
+        CollectionReference<Map<String, dynamic>> childrenCollection =
+            await firestore.collection("users").doc(uid).collection("todos");
 
-      var uuidTodo = Uuid().v1();
+        var uuidTodo = Uuid().v1();
 
-      await childrenCollection.doc(uuidTodo).set({
-        "task_id": uuidTodo,
-        "title": titleC.text,
-        "description": descriptionC.text,
-        "created_at": DateTime.now().toIso8601String(),
-      });
+        String fileName = file!.path.split('/').last;
+        String ext = fileName.split(".").last;
+        String upDir = "image/${uuidTodo}.$ext";
 
-      Get.back(); //close dialog
-      Get.back(); //close form screen
-      CustomToast.successToast('Success', 'Berhasil menambahkan todo');
+        var snapshot =
+            await firebaseStorage.ref().child('images/$upDir').putFile(file!);
+        var downloadUrl = await snapshot.ref.getDownloadURL();
 
-      isLoadingCreateTodo.value = false;
-    } on FirebaseAuthException catch (e) {
-      isLoadingCreateTodo.value = false;
-      CustomToast.errorToast('Error', 'error : ${e.code}');
-    } catch (e) {
-      isLoadingCreateTodo.value = false;
-      CustomToast.errorToast('Error', 'error : ${e.toString()}');
+        await childrenCollection.doc(uuidTodo).set({
+          "task_id": uuidTodo,
+          "title": titleC.text,
+          "description": descriptionC.text,
+          "image": downloadUrl,
+          "created_at": DateTime.now().toIso8601String(),
+        });
+
+        Get.back(); //close dialog
+        Get.back(); //close form screen
+        CustomToast.successToast('Success', 'Berhasil menambahkan todo');
+
+        isLoadingCreateTodo.value = false;
+      } on FirebaseAuthException catch (e) {
+        isLoadingCreateTodo.value = false;
+        CustomToast.errorToast('Error', 'error : ${e.code}');
+      } catch (e) {
+        isLoadingCreateTodo.value = false;
+        CustomToast.errorToast('Error', 'error : ${e.toString()}');
+      }
+    } else {
+      CustomToast.errorToast('Error', 'gambar tidak boleh kosong !!');
     }
   }
 }

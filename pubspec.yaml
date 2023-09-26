@@ -17,6 +17,8 @@ dependencies:
   flutter_svg: ^2.0.7
   intl: ^0.18.1
   uuid: ^3.0.7
+  file_picker: ^5.5.0
+  camera_camera: ^3.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

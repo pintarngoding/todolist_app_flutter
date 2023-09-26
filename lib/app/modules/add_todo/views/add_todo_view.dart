@@ -36,51 +36,108 @@ class AddTodoView extends GetView<AddTodoController> {
           ),
         ),
       ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.all(20),
-        children: [
-          CustomInput(
-            controller: controller.titleC,
-            label: 'Nama Todo',
-            hint: 'Menyelesaikan tugas',
-          ),
-          CustomInput(
-            controller: controller.descriptionC,
-            label: 'Deskripsi Todo',
-            hint: 'Diselesaikan sebelum tanggal 25',
-          ),
-          SizedBox(height: 32),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            child: Obx(
-              () => ElevatedButton(
-                onPressed: () {
-                  if (controller.isLoading.isFalse) {
-                    controller.addTodo();
-                  }
-                },
-                child: Text(
-                  (controller.isLoading.isFalse) ? 'Tambah todo' : 'Loading...',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'poppins',
+      body: GetBuilder<AddTodoController>(builder: (controller) {
+        return ListView(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.all(20),
+          children: [
+            CustomInput(
+              controller: controller.titleC,
+              label: 'Nama Todo',
+              hint: 'Menyelesaikan tugas',
+            ),
+            CustomInput(
+              controller: controller.descriptionC,
+              label: 'Deskripsi Todo',
+              hint: 'Diselesaikan sebelum tanggal 25',
+            ),
+            (controller.file != null)
+                ? Image.file(controller.file!)
+                : const SizedBox(),
+            const SizedBox(
+              height: 16,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => controller.toCamera(),
+                    child: Text(
+                      'Kamera',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'poppins',
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.primary,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  primary: AppColor.primary,
-                  padding: EdgeInsets.symmetric(vertical: 18),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                const SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => controller.pickFile(),
+                    child: Text(
+                      'Galeri',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'poppins',
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.primary,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 32),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Obx(
+                () => ElevatedButton(
+                  onPressed: () {
+                    if (controller.isLoading.isFalse) {
+                      controller.addTodo();
+                    }
+                  },
+                  child: Text(
+                    (controller.isLoading.isFalse)
+                        ? 'Tambah todo'
+                        : 'Loading...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'poppins',
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.primary,
+                    padding: EdgeInsets.symmetric(vertical: 18),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
-      ),
+            )
+          ],
+        );
+      }),
     );
   }
 }

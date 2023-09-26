@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,15 +17,19 @@ class DetailTodoController extends GetxController {
 
   TextEditingController titleC = TextEditingController();
   TextEditingController descriptionC = TextEditingController();
+  String image = "";
+  String imageName = "";
 
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   @override
   void onInit() {
     super.onInit();
     titleC.text = argsData["title"];
     descriptionC.text = argsData["description"];
+    image = argsData["image"];
   }
 
   @override
@@ -51,6 +56,8 @@ class DetailTodoController extends GetxController {
         Get.back(); // close modal
         Get.back(); // back page
         try {
+          await firebaseStorage.refFromURL(image).delete();
+
           String uid = auth.currentUser!.uid;
           await firestore
               .collection('users')

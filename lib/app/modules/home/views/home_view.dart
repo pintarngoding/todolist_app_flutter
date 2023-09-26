@@ -215,6 +215,7 @@ class HomeView extends GetView<HomeController> {
                                           "title": "${todoData["title"]}",
                                           "description":
                                               "${todoData["description"]}",
+                                          "image": "${todoData["image"]}",
                                         },
                                       ),
                                     },

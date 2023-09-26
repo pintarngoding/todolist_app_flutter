@@ -65,6 +65,10 @@ class DetailTodoView extends GetView<DetailTodoController> {
             hint: 'Diselesaikan sebelum tanggal 25',
             disabled: true,
           ),
+          Image.network(controller.image),
+          const SizedBox(
+            height: 16,
+          ),
           ElevatedButton(
             onPressed: () {
               controller.deleteTodo();

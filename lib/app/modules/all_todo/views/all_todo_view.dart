@@ -65,6 +65,7 @@ class AllTodoView extends GetView<AllTodoController> {
                               "id": "${todoData["task_id"]}",
                               "title": "${todoData["title"]}",
                               "description": "${todoData["description"]}",
+                              "image": "${todoData["image"]}",
                             },
                           )
                         },
