@@ -10,6 +10,7 @@ abstract class Routes {
   static const ALL_TODO = _Paths.ALL_TODO;
   static const DETAIL_TODO = _Paths.DETAIL_TODO;
   static const EDIT_TODO = _Paths.EDIT_TODO;
+  static const DELETE_TODO = _Paths.DELETE_TODO;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const ALL_TODO = '/all-todo';
   static const DETAIL_TODO = '/detail-todo';
   static const EDIT_TODO = '/edit-todo';
+  static const DELETE_TODO = '/delete-todo';
 }
