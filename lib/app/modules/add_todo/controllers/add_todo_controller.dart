@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_crud_firebase/app/modules/add_todo/views/camera_view.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../widgets/custom_toast.dart';
@@ -155,21 +156,49 @@ class AddTodoController extends GetxController {
 
   void increment() => count.value++;
 
+  void cropFile() async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: file!.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        ),
+      ],
+    );
+
+    file = File(croppedFile!.path);
+    update();
+  }
+
   void pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       file = File(result.files.single.path ?? '');
+      cropFile();
     } else {
       // User canceled the picker
     }
-    update();
   }
 
   void toCamera() {
     Get.to(CameraView())!.then((result) {
       file = result;
-      update();
+      cropFile();
+      // update();
     });
   }
 

@@ -6,22 +6,23 @@ environment:
   sdk: ">=3.0.1 <4.0.0"
 
 dependencies:
+  camera_camera: ^3.0.0
+  cloud_firestore: ^4.8.3
   cupertino_icons: ^1.0.2
-  get: 4.6.5
+  file_picker: ^5.5.0
+  firebase_auth: ^4.7.1
+  firebase_core: ^2.15.0
+  firebase_storage: ^11.2.5
   flutter:
     sdk: flutter
-  firebase_core: ^2.15.0
-  firebase_auth: ^4.7.1
-  firebase_storage: ^11.2.5
-  cloud_firestore: ^4.8.3
-  flutter_svg: ^2.0.7
-  intl: ^0.18.1
-  uuid: ^3.0.7
-  file_picker: ^5.5.0
-  camera_camera: ^3.0.0
-  geolocator: ^10.1.0
   flutter_map: ^5.0.0
+  flutter_svg: ^2.0.7
+  geolocator: ^10.1.0
+  get: 4.6.5
+  image_cropper: ^5.0.0
+  intl: ^0.18.1
   latlong2: ^0.9.0
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_lints: ^2.0.0
