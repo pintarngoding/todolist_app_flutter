@@ -19,6 +19,9 @@ dependencies:
   uuid: ^3.0.7
   file_picker: ^5.5.0
   camera_camera: ^3.0.0
+  geolocator: ^10.1.0
+  flutter_map: ^5.0.0
+  latlong2: ^0.9.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,7 +6,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_crud_firebase/app/modules/add_todo/views/camera_view.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,9 +30,114 @@ class AddTodoController extends GetxController {
 
   File? file;
 
+  Position? currentPosition;
+  Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  void getCurrentLocation() async {
+    try {
+      currentPosition = await determinePosition();
+      update();
+    } catch (e) {
+      Get.defaultDialog(
+        title: "",
+        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+        radius: 8,
+        titlePadding: EdgeInsets.zero,
+        titleStyle: TextStyle(fontSize: 0),
+        content: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Error",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    e.toString(),
+                    style: TextStyle(
+                      color: Colors.grey,
+                      height: 150 / 100,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: ElevatedButton(
+                      onPressed: () => Get.back(),
+                      child: Text(
+                        "batal",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    flex: 6,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Get.back();
+                        await Geolocator.openAppSettings();
+                      },
+                      child: Text("Request Permission"),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+      log(e.toString());
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
+
+    getCurrentLocation();
   }
 
   @override

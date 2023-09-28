@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../utils/app_color.dart';
 import '../../../widgets/custom_input.dart';
@@ -51,6 +53,51 @@ class AddTodoView extends GetView<AddTodoController> {
               controller: controller.descriptionC,
               label: 'Deskripsi Todo',
               hint: 'Diselesaikan sebelum tanggal 25',
+            ),
+            (controller.currentPosition != null)
+                ? SizedBox(
+                    height: 300,
+                    child: FlutterMap(
+                      options: MapOptions(
+                        center: LatLng(controller.currentPosition!.latitude,
+                            controller.currentPosition!.longitude),
+                        zoom: 13,
+                      ),
+                      nonRotatedChildren: [
+                        RichAttributionWidget(
+                          attributions: [
+                            TextSourceAttribution(
+                              'OpenStreetMap contributors',
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
+                      ],
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.example.app',
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: LatLng(
+                                  controller.currentPosition!.latitude,
+                                  controller.currentPosition!.longitude),
+                              width: 48,
+                              height: 48,
+                              builder: (context) => Image.network(
+                                  "https://www.pngall.com/wp-content/uploads/2017/05/Map-Marker-PNG-Pic.png"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox(),
+            const SizedBox(
+              height: 16,
             ),
             (controller.file != null)
                 ? Image.file(controller.file!)
