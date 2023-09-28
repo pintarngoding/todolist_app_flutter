@@ -14,6 +14,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/result_scan/bindings/result_scan_binding.dart';
+import '../modules/result_scan/views/result_scan_view.dart';
 
 part 'app_routes.dart';
 
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.EDIT_TODO,
       page: () => const EditTodoView(),
       binding: EditTodoBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESULT_SCAN,
+      page: () => const ResultScanView(),
+      binding: ResultScanBinding(),
     ),
   ];
 }

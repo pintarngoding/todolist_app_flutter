@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_crud_firebase/app/modules/home/controllers/home_controller.dart';
+import 'package:flutter_crud_firebase/app/modules/home/views/scan_view.dart';
 import 'package:flutter_crud_firebase/app/routes/app_pages.dart';
 import 'package:flutter_crud_firebase/app/utils/app_color.dart';
 import 'package:flutter_crud_firebase/app/widgets/custom_input.dart';
@@ -209,6 +212,9 @@ class HomeView extends GetView<HomeController> {
                           ],
                         ),
                       ),
+                      ElevatedButton(
+                          onPressed: () => Get.to(ScanView()),
+                          child: Text("Scan Qr Code")),
                       StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                           stream:
                               controller.streamLastTodo().asBroadcastStream(),
