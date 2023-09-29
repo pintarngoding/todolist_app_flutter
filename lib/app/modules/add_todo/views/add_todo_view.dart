@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../utils/app_color.dart';
@@ -59,6 +62,29 @@ class AddTodoView extends GetView<AddTodoController> {
               label: 'Waktu Todo',
               hint: 'Waktu',
               isTime: true,
+            ),
+            TextField(
+              controller: controller.addtimeC,
+              keyboardType: TextInputType.number,
+              onEditingComplete: () {
+                DateTime now = DateTime.now();
+                var date = DateFormat('yyyy-MM-dd').format(now);
+
+                var dateTime = DateTime.parse("$date ${controller.timeC.text}");
+                var finalTime = DateFormat('HH:mm').format(dateTime.add(
+                    Duration(minutes: int.parse(controller.addtimeC.text))));
+                // DateTime.parse(controller.timeC.text).add(
+                //     Duration(minutes: int.parse(controller.addtimeC.text)));
+                controller.lasttimeC.text = finalTime.toString();
+                print(finalTime.toString());
+                controller.update();
+              },
+            ),
+            CustomInput(
+              controller: controller.lasttimeC,
+              label: "Batas Waktu",
+              hint: "Batas Waktu",
+              disabled: true,
             ),
             (controller.currentPosition != null)
                 ? SizedBox(

@@ -25,6 +25,8 @@ class AddTodoController extends GetxController {
   TextEditingController titleC = TextEditingController();
   TextEditingController descriptionC = TextEditingController();
   TextEditingController timeC = TextEditingController();
+  TextEditingController addtimeC = TextEditingController();
+  TextEditingController lasttimeC = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
