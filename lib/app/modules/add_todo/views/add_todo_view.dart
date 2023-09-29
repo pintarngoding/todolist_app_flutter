@@ -54,6 +54,12 @@ class AddTodoView extends GetView<AddTodoController> {
               label: 'Deskripsi Todo',
               hint: 'Diselesaikan sebelum tanggal 25',
             ),
+            CustomInput(
+              controller: controller.timeC,
+              label: 'Waktu Todo',
+              hint: 'Waktu',
+              isTime: true,
+            ),
             (controller.currentPosition != null)
                 ? SizedBox(
                     height: 300,

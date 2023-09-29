@@ -12,6 +12,7 @@ class CustomInput extends StatefulWidget {
   final bool obsecureText;
   final Widget? suffixIcon;
   final bool isDate;
+  final bool isTime;
   final bool isNumber;
   final bool isClickEmpty;
   CustomInput({
@@ -22,6 +23,7 @@ class CustomInput extends StatefulWidget {
     this.margin = const EdgeInsets.only(bottom: 16),
     this.obsecureText = false,
     this.isDate = false,
+    this.isTime = false,
     this.suffixIcon,
     this.isNumber = false,
     this.isClickEmpty = false,
@@ -80,6 +82,22 @@ class _CustomInputState extends State<CustomInput> {
                 });
               } else {
                 print("Date is not selected");
+              }
+            } else if (widget.isTime) {
+              TimeOfDay? pickedTime = await showTimePicker(
+                  context: context, initialTime: TimeOfDay.now());
+
+              if (pickedTime != null) {
+                print(pickedTime);
+
+                final localizations = MaterialLocalizations.of(context);
+                final formattedTimeOfDay = localizations
+                    .formatTimeOfDay(pickedTime, alwaysUse24HourFormat: true);
+
+                setState(() {
+                  widget.controller.text =
+                      formattedTimeOfDay; //set output date to TextField value.
+                });
               }
             }
             if (widget.isClickEmpty) {
