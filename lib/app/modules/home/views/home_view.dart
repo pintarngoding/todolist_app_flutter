@@ -215,6 +215,9 @@ class HomeView extends GetView<HomeController> {
                       ElevatedButton(
                           onPressed: () => Get.to(ScanView()),
                           child: Text("Scan Qr Code")),
+                      ElevatedButton(
+                          onPressed: () => Get.toNamed(Routes.CETAK),
+                          child: Text("Halaman Cetak")),
                       StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                           stream:
                               controller.streamLastTodo().asBroadcastStream(),

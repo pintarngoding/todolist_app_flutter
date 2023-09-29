@@ -65,8 +65,8 @@ class HomeController extends GetxController {
           .collection("users")
           .doc(uid)
           .collection("todos")
-          .where("title", isEqualTo: searchC.text.trim())
-          .orderBy("created_at", descending: true)
+          .where("title", isGreaterThanOrEqualTo: searchC.text.trim())
+          .where("title", isLessThan: "${searchC.text.trim()}z")
           .snapshots();
     }
   }
