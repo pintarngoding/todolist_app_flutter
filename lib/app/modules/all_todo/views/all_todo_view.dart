@@ -58,11 +58,12 @@ class AllTodoView extends GetView<AllTodoController> {
                       width: 16,
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          controller.getAllResult();
-                          controller.update();
-                        },
-                        child: Text("test"))
+                      onPressed: () {
+                        controller.getAllResult();
+                        controller.update();
+                      },
+                      child: Text("test"),
+                    ),
                   ],
                 ),
               ),

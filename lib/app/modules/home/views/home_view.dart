@@ -232,14 +232,31 @@ class HomeView extends GetView<HomeController> {
                                         QueryDocumentSnapshot<
                                             Map<String, dynamic>>> listResults =
                                     snapshot.data!.docs;
+
+                                var items = [];
+                                listResults.forEach((element) {
+                                  items.add(element.data());
+                                });
+
+                                if (controller.searchC.text.isNotEmpty) {
+                                  items = items
+                                      .where((e) => e["title"]
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(controller.searchC.text
+                                              .toLowerCase()))
+                                      .toList();
+                                }
+
                                 return ListView.separated(
-                                  itemCount: listResults.length,
+                                  itemCount: items.length,
                                   shrinkWrap: true,
                                   physics: BouncingScrollPhysics(),
                                   separatorBuilder: (context, index) =>
                                       SizedBox(height: 16),
                                   itemBuilder: (context, index) {
-                                    var todoData = listResults[index].data();
+                                    // var todoData = listResults[index].data();
+                                    var todoData = items[index];
                                     print(todoData);
                                     return InkWell(
                                       onTap: () => {
